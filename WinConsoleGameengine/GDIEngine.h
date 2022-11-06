@@ -1,3 +1,15 @@
+/*
+*Version 1.0
+*The GDI graphics library with little capability of performance
+*Created by Osbourne Laud Clark
+**On 6th november 2022
+*Treated at the university of plymouth
+*
+*people downloading this library may modify, use, distribute, and share.
+*this must stay in contact and shouldn't be edited  
+*/
+
+
 #ifndef GDIENGINE__
 #define GDIENGINE__
 #include <Windows.h>
