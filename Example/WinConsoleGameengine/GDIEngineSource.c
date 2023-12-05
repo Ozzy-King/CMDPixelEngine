@@ -3,7 +3,7 @@
 *The GDI graphics library with little capability of performance
 *Created by Osbourne Laud Clark
 **On 6th november 2022
-*Treated at the university of plymouth
+*Created at the university of plymouth
 *
 *people downloading this library may modify, use, distribute, and share.
 *this must stay in contact and shouldn't be edited  
@@ -117,7 +117,7 @@ int GDsetTitle(char* title) {
 		titleLen = _GDstrLen(title);
 	}
 
-	WCHAR* titleTextPointer = malloc(sizeof(WCHAR) * (titleLen + 1)); //creates a new wide char list(WCHAR array) +1 for a terminating character(\0)
+	WCHAR* titleTextPointer = (WCHAR*)malloc(sizeof(WCHAR) * (titleLen + 1)); //creates a new wide char list(WCHAR array) +1 for a terminating character(\0)
 	if (titleTextPointer == NULL) { printf("error occured while locating space\n"); return 1; }
 	for (int i = 0; i < titleLen; i++) {//iterats through lists and transfers memory
 		titleTextPointer[i] = title[i]; //actual transfer (char is 1byte, wide char is 2 bytes)

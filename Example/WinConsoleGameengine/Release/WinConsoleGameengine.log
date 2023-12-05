@@ -1,8 +1,9 @@
-﻿  main.cpp
-C:\Users\GRUB\source\repos\WinConsoleGameengine\WinConsoleGameengine\main.cpp(29,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  GDISpriteSource.c
+  main.cpp
+C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\WinConsoleGameengine\main.cpp(29,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Generating code
-  2 of 34 functions ( 5.9%) were compiled, the rest were copied from previous compilation.
+  0 of 34 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  WinConsoleGameengine.vcxproj -> C:\Users\GRUB\source\repos\WinConsoleGameengine\Release\WinConsoleGameengine.exe
+  WinConsoleGameengine.vcxproj -> C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\Release\WinConsoleGameengine.exe
