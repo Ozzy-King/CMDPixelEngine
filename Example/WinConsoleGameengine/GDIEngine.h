@@ -38,11 +38,13 @@ extern "C" {
 	extern RECT _GDpixelScreenSize; //user defined pixel screen size
 	extern int _GDwidth, _GDheight;
 
+	extern int _GDpixelWidth, _GDpixelHeight;
+
 	//function proto types//
 
 	int _GDstrLen(char* string);
 	int GDinit(int width, int height, int pixelWidth, int pixelHeight, char* title);
-	int GDsetTitle(char* title);
+	int GDsetTitle(const char* title);
 
 	/*
 	draws to current backbuffer

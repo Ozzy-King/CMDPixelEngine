@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <libloaderapi.h>
+#include <string>
 
 #include "GDIEngine.h"
 #include "GDISprite.h"
@@ -23,7 +24,7 @@ void scrolltext(std::string& str) {
 int main() {
 
 	char title[] = "NULL";
-	if (GDinit(255, 255, 2, 2, title)) {
+	if (GDinit(80, 80, 4, 4, title)) {
 		return 0;
 	}
 	srand(time(NULL));
@@ -32,18 +33,24 @@ int main() {
 	char fileName[] = "./textTest.bmp";
 	struct GDSPsprite newSorite = GDSPcreateSprite(fileName, 20, 20, 10, 10, 1, RGB(0,0,0));
 
+	int start = 1;
+	int end = 2;
+
 	while (true) { //not good practice
-
+		GDsetTitle(std::to_string((double)1/ ((double)(end-start)/ CLOCKS_PER_SEC)).c_str());
+		start = (int)clock();
 		GDclear(RGB(255,255,255));
-		//for (int x = 0; x < _GDwidth - 5; x++) {
-		//	for (int y = 0; y < _GDheight - 5; y++) {
-		//		GDdrawPixel(x,y ,RGB(rand()%256, rand()%256, rand()%256));
-		//	}
-		//}
+		for (int x = 0; x < _GDwidth; x++) {
+			for (int y = 0; y < _GDheight; y++) {
+				GDdrawPixel(x,y ,RGB(rand()%256, rand()%256, rand()%256));
+			}
+		}
 
-		GDSPdrawSprite(0, 0, 50, 50, &newSorite, 0);
+		GDSPdrawSprite(0, 0, 40, 40, &newSorite, 3);
+		GDSPdrawSprite(40, 40, 40,40, &newSorite, 0);
 
 		GDdrawBackBuffer();
+		end = (int)clock();
 	}
 
 	GDdeInit();

@@ -121,7 +121,7 @@ returns false(0) if successfull, return true(1) if fails
 changes the title to the given string or to "GDIEngine-Tile" by defalut
 title needs to be less than 63998 to be less than 64000 characters long and accomodate for terminating('\0') value
 */
-int GDsetTitle(char* title) {
+int GDsetTitle(const char* title) {
 	int replace = 0;
 	char replacementText[] = "Error Occured while setting title (eather too small or big)";
 	char* origTitle = title;
