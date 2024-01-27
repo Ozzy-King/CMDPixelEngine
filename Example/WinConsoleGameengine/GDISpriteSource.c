@@ -27,10 +27,33 @@ struct GDSPsprite GDSPcreateSprite(char* fileName, int imgWidth, int imgHeight, 
 		for (int x = (imgWidth-tileWidth); x >= 0; x -= tileWidth) {
 			numberOfTiles--;
 			newSprite._topLeftX[numberOfTiles] = x;
-			newSprite._topLeftX[numberOfTiles] = y;
+			newSprite._topLeftY[numberOfTiles] = y;
 		}
 	}
 
 	free(ConvertedFilename);
 	return newSprite;
+}
+
+int GDSPfreeSprite(struct GDSPsprite* sprite) {
+	free(sprite->_topLeftX);
+	free(sprite->_topLeftY);
+	DeleteObject(sprite->_spriteMap);
+}
+
+int GDSPdrawSprite(int x, int y, int width, int height, struct GDSPsprite* sprite, int tilePos) {
+	HDC tempDeviceContext = CreateCompatibleDC(_GDconsoleDeviceContext);
+	HBITMAP temp = SelectObject(tempDeviceContext, sprite->_spriteMap); //links the bitmap to the dc to draw on it
+
+	//BitBlt(_GDbackBufferDeviceContext, min(x, _GDrawWidth), min(y, _GDrawHeight), min(sprite->_tileWidth, _GDrawWidth), min(sprite->_tileHeight, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], SRCCOPY);
+	
+	if (sprite->_transparent) {
+		TransParentBlt(_GDbackBufferDeviceContext, min(x, _GDrawWidth), min(y, _GDrawHeight), min(width, _GDrawWidth), min(height, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], sprite->_tileWidth, sprite->_tileHeight, sprite->_transparentColour);
+	} else {
+		StretchBlt(_GDbackBufferDeviceContext, min(x, _GDrawWidth), min(y, _GDrawHeight), min(width, _GDrawWidth), min(height, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], sprite->_tileWidth, sprite->_tileHeight, SRCCOPY);
+	}
+	SelectObject(tempDeviceContext, temp);
+	DeleteDC(tempDeviceContext);
+	return 0;
+
 }

@@ -32,5 +32,8 @@
     <ClInclude Include="GDISprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="allImportHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

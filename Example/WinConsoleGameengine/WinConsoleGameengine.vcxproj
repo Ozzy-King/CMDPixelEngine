@@ -133,6 +133,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="allImportHeader.h" />
     <ClInclude Include="GDIEngine.h" />
     <ClInclude Include="GDISprite.h" />
   </ItemGroup>

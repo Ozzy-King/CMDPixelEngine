@@ -34,6 +34,23 @@ int _GDwidth = 0, _GDheight = 0;
 
 int _GDpixelWidth = 0, _GDpixelHeight = 0;
 
+//this is soem messed up stuff about to happen
+typedef BOOL(__stdcall* TransParentBitBlt)(
+	HDC  hdcDest,
+	int  xoriginDest,
+	int  yoriginDest,
+	int  wDest,
+	int  hDest,
+	HDC  hdcSrc,
+	int  xoriginSrc,
+	int  yoriginSrc,
+	int  wSrc,
+	int  hSrc,
+	UINT crTransparent
+	);
+HMODULE __SMimg32DLL;
+TransParentBitBlt TransParentBlt = NULL;
+
 
 /*
 gets the length of and inputed string (assumes it has null terminator("\0"))
@@ -89,6 +106,11 @@ int GDinit(int width, int height, int pixelWidth, int pixelHeight, char* title) 
 
 	//edits the title
 	GDsetTitle(title);
+
+	//this is for tranparentBlt
+	//loading important dll :)
+	__SMimg32DLL = LoadLibraryA("./msimg32.dll");
+	TransParentBlt = (TransParentBitBlt)GetProcAddress(__SMimg32DLL, "TransparentBlt");
 
 	return 0;
 }
@@ -195,5 +217,6 @@ int GDdrawBackBuffer() {
 int GDdeInit() {
 	DeleteObject(_GDbackBufferBitMap);
 	DeleteDC(_GDbackBufferDeviceContext);
+	FreeLibrary(__SMimg32DLL);
 	return 0;
 }

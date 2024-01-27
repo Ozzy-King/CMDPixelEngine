@@ -3,7 +3,7 @@
 *The GDI graphics library with little capability of performance
 *Created by Osbourne Laud Clark
 **On 6th november 2022
-*Treated at the university of plymouth
+*Created at the university of plymouth
 *
 *people downloading this library may modify, use, distribute, and share.
 *this must stay in contact and shouldn't be edited  
@@ -33,6 +33,23 @@ RECT _GDpixelScreenSize = {0}; //user defined pixel screen size
 int _GDwidth = 0, _GDheight = 0;
 
 int _GDpixelWidth = 0, _GDpixelHeight = 0;
+
+//this is soem messed up stuff about to happen
+typedef BOOL(__stdcall* TransParentBitBlt)(
+	HDC  hdcDest,
+	int  xoriginDest,
+	int  yoriginDest,
+	int  wDest,
+	int  hDest,
+	HDC  hdcSrc,
+	int  xoriginSrc,
+	int  yoriginSrc,
+	int  wSrc,
+	int  hSrc,
+	UINT crTransparent
+	);
+HMODULE __SMimg32DLL;
+TransParentBitBlt TransParentBlt = NULL;
 
 
 /*
@@ -90,6 +107,11 @@ int GDinit(int width, int height, int pixelWidth, int pixelHeight, char* title) 
 	//edits the title
 	GDsetTitle(title);
 
+	//this is for tranparentBlt
+	//loading important dll :)
+	__SMimg32DLL = LoadLibraryA("./msimg32.dll");
+	TransParentBlt = (TransParentBitBlt)GetProcAddress(__SMimg32DLL, "TransparentBlt");
+
 	return 0;
 }
 
@@ -117,7 +139,7 @@ int GDsetTitle(char* title) {
 		titleLen = _GDstrLen(title);
 	}
 
-	WCHAR* titleTextPointer = malloc(sizeof(WCHAR) * (titleLen + 1)); //creates a new wide char list(WCHAR array) +1 for a terminating character(\0)
+	WCHAR* titleTextPointer = (WCHAR*)malloc(sizeof(WCHAR) * (titleLen + 1)); //creates a new wide char list(WCHAR array) +1 for a terminating character(\0)
 	if (titleTextPointer == NULL) { printf("error occured while locating space\n"); return 1; }
 	for (int i = 0; i < titleLen; i++) {//iterats through lists and transfers memory
 		titleTextPointer[i] = title[i]; //actual transfer (char is 1byte, wide char is 2 bytes)
@@ -195,5 +217,6 @@ int GDdrawBackBuffer() {
 int GDdeInit() {
 	DeleteObject(_GDbackBufferBitMap);
 	DeleteDC(_GDbackBufferDeviceContext);
+	FreeLibrary(__SMimg32DLL);
 	return 0;
 }
