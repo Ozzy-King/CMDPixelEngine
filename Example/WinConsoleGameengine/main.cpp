@@ -39,6 +39,7 @@ int main() {
 	while (true) { //not good practice
 		GDsetTitle(std::to_string((double)1/ ((double)(end-start)/ CLOCKS_PER_SEC)).c_str());
 		start = (int)clock();
+
 		GDclear(RGB(255,255,255));
 		for (int x = 0; x < _GDwidth; x++) {
 			for (int y = 0; y < _GDheight; y++) {
@@ -50,6 +51,8 @@ int main() {
 		GDSPdrawSprite(40, 40, 40,40, &newSorite, 0);
 
 		GDdrawBackBuffer();
+
+
 		end = (int)clock();
 	}
 

@@ -136,6 +136,7 @@
     <ClInclude Include="allImportHeader.h" />
     <ClInclude Include="GDIEngine.h" />
     <ClInclude Include="GDISprite.h" />
+    <ClInclude Include="world.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
