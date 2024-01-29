@@ -2,7 +2,7 @@
 #include "GDISprite.h"
 
 struct vec2d {
-	int x, y;
+	int x=0, y=0;
 };
 
 class world {
@@ -23,9 +23,9 @@ class world {
 	};
 
 	int worldOffsetX = 0, worldOffsetY = 0;
-	int worldWidth = 0, worldHeight = 0;
+	int worldWidth = 10, worldHeight = 10;
 
-	int worldLittleTileWidth = 10, worldLittleTileWidth = 10;
+	int worldLittleTileWidth = 10, worldLittleTileHeight = 10;
 	int worldTileWidth = 20, worldTileHeight = 10;
 
 	int** MAP;
@@ -36,8 +36,8 @@ public:
 	vec2d PosToWorldPos(int x, int y){
 		vec2d newVec;
 		//set along x
-		newVec.x += (worldTileWidth/2)*x;
-		newVec.y += (worldTileHeight / 2)*x;
+		newVec.x = (worldTileWidth/2)*x;
+		newVec.y = (worldTileHeight / 2)*x;
 		//set along y
 		newVec.x -= (worldTileWidth / 2)*y;
 		newVec.y += (worldTileHeight / 2)*y;
@@ -55,17 +55,38 @@ public:
 		tileMapSelect += tilesect * 20; //goes to the correct tile section
 		return tileMapSelect;
 	}
+	//TODO correc tthe check for if the side should draw
 	int drawTile(int xTilePos, int yTilePos) {
 		int blockleft = 0, blockright = 0;
+		//check right block
+		if (xTilePos < worldWidth) {
+			blockright = MAP[yTilePos][xTilePos+1];
+		}
 		//check left block
-		if (xTilePos > 0 || xTilePos < worldWidth) {
+		if (yTilePos > 0) {
+			blockright = MAP[yTilePos-1][xTilePos];
+		}
+		//gridPosToWorldPos
+		vec2d worldCoord = PosToWorldPos(xTilePos, yTilePos);
+		//top left
+		GDSPdrawSprite(worldCoord.x, worldCoord.y, worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::left, (tileType)MAP[yTilePos][xTilePos], tileSection::top));
+		//top right
+		GDSPdrawSprite(worldCoord.x+ worldLittleTileWidth, worldCoord.y, worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::right, (tileType)MAP[yTilePos][xTilePos], tileSection::top));
 		
+		if (!blockleft) {
+				//middle left
+				GDSPdrawSprite(worldCoord.x, worldCoord.y + (worldLittleTileHeight / 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::left, (tileType)MAP[yTilePos][xTilePos], tileSection::middle));
+				//bottom left
+				GDSPdrawSprite(worldCoord.x, worldCoord.y + ((worldLittleTileHeight/2)*2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::left, (tileType)MAP[yTilePos][xTilePos], tileSection::bottom));
 		}
-		if (yTilePos > 0 || yTilePos < worldHeight) {
-
+			
+		if (!blockright) {
+				//middle right
+				GDSPdrawSprite(worldCoord.x+ worldLittleTileWidth, worldCoord.y + (worldLittleTileHeight / 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::right, (tileType)MAP[yTilePos][xTilePos], tileSection::middle));
+				//bottom right
+				GDSPdrawSprite(worldCoord.x+ worldLittleTileWidth, worldCoord.y + ((worldLittleTileHeight / 2) * 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::right, (tileType)MAP[yTilePos][xTilePos], tileSection::bottom));
 		}
-
-
+		return 0;
 	}
 
 	int start() {
@@ -78,7 +99,7 @@ public:
 		for (int y = 0; y < worldHeight; y++) {
 			MAP[y] = (int*)malloc(sizeof(int) * worldWidth);
 			for (int x = 0; x < worldWidth; x++) {
-				MAP[y][x] = tileType::blank;
+				MAP[y][x] = tileType::grass;
 			}
 		}
 
@@ -88,10 +109,8 @@ public:
 	int update() {
 		
 		for (int y = 0; y < worldHeight; y++) {
-			int worldY = tileYToWorld(y);
 			for (int x = 0; x < worldWidth; x++) {
-				int worldX = tileXToWorld(x);
-				//GDSPdrawSprite();
+				drawTile(x, y);
 			}
 		}
 		
