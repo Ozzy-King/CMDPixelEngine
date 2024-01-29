@@ -7,6 +7,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
+
 	typedef BOOL(__stdcall* TransParentBitBlt)(
 		HDC  hdcDest,
 		int  xoriginDest,

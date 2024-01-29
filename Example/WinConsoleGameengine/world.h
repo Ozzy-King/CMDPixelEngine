@@ -1,6 +1,8 @@
 #pragma once
 #include "GDISprite.h"
 
+extern int __memused__;
+
 struct vec2d {
 	int x=0, y=0;
 };
@@ -22,7 +24,7 @@ class world {
 		right
 	};
 
-	int worldOffsetX = 0, worldOffsetY = 0;
+	int worldOffsetX = -212, worldOffsetY = 0;
 	int worldWidth = 10, worldHeight = 10;
 
 	int worldLittleTileWidth = 10, worldLittleTileHeight = 10;
@@ -39,8 +41,8 @@ public:
 		newVec.x = (worldTileWidth/2)*x;
 		newVec.y = (worldTileHeight / 2)*x;
 		//set along y
-		newVec.x -= (worldTileWidth / 2)*y;
-		newVec.y += (worldTileHeight / 2)*y;
+		newVec.x -= (worldTileWidth / 2)*y + worldOffsetX;
+		newVec.y += (worldTileHeight / 2)*y + worldOffsetY;
 		return newVec;
 	}
 	int getTileFromTileMap(Sides side, tileType tiletype, tileSection tilesect) {
@@ -59,12 +61,12 @@ public:
 	int drawTile(int xTilePos, int yTilePos) {
 		int blockleft = 0, blockright = 0;
 		//check right block
-		if (xTilePos < worldWidth) {
-			blockright = MAP[yTilePos][xTilePos+1];
+		if (yTilePos < worldHeight-1) {
+			blockleft = MAP[yTilePos+1][xTilePos];
 		}
 		//check left block
-		if (yTilePos > 0) {
-			blockright = MAP[yTilePos-1][xTilePos];
+		if (xTilePos < worldWidth-1) {
+			blockright = MAP[yTilePos][xTilePos+1];
 		}
 		//gridPosToWorldPos
 		vec2d worldCoord = PosToWorldPos(xTilePos, yTilePos);
@@ -99,7 +101,7 @@ public:
 		for (int y = 0; y < worldHeight; y++) {
 			MAP[y] = (int*)malloc(sizeof(int) * worldWidth);
 			for (int x = 0; x < worldWidth; x++) {
-				MAP[y][x] = tileType::grass;
+				MAP[y][x] = tileType::gravel;
 			}
 		}
 

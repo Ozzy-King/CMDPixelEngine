@@ -55,7 +55,7 @@ TransParentBitBlt TransParentBlt = NULL;
 /*
 gets the length of and inputed string (assumes it has null terminator("\0"))
 */
-int _GDstrLen(char* string) {
+int _GDstrLen(const char* string) {
 	int i = 0;
 	while (string[i]!='\0') {
 		i++;
@@ -96,7 +96,7 @@ int GDinit(int width, int height, int pixelWidth, int pixelHeight, char* title) 
 	_GDbackBufferBitMap = CreateCompatibleBitmap(_GDconsoleDeviceContext, _GDrawWidth, _GDrawHeight);
 	SelectObject(_GDbackBufferDeviceContext, _GDbackBufferBitMap); //links the bitmap to the dc to draw on it
 
-
+	//lock widnow from drawing ----------- test
 
 	//sets the curosor to the width of one and hids it
 	CONSOLE_CURSOR_INFO newCursor = { 1, FALSE };
@@ -205,6 +205,7 @@ the ,+31 on y, +8 on x, weird offsets the draw or it will draw under the top bar
 returns false(0) if successfull, return true(1) if fails
 */
 int GDdrawBackBuffer() {
+	LockWindowUpdate(NULL);
 	if (BitBlt(_GDconsoleDeviceContext, 0 + 8, 0 + 31, _GDrawWidth, _GDrawHeight, _GDbackBufferDeviceContext, 0, 0, SRCCOPY)) {
 		return 0;
 	}
@@ -212,6 +213,7 @@ int GDdrawBackBuffer() {
 		printf("Back Buffer Blit failed\n");
 		return 1;
 	}
+	LockWindowUpdate(_GDconsoleWinHandle);
 }
 
 int GDdeInit() {

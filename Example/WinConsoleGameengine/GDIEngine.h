@@ -40,6 +40,7 @@ extern "C" {
 
 	extern int _GDpixelWidth, _GDpixelHeight;
 
+
 	//function proto types//
 
 	int _GDstrLen(char* string);
