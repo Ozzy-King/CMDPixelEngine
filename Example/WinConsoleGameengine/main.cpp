@@ -27,7 +27,7 @@ void scrolltext(std::string& str) {
 int main() {
 
 	char title[] = "NULL";
-	if (GDinit(255, 255, 2, 2, title)) {
+	if (GDinit(255, 255, 4, 4, title)) {
 		return 0;
 	}
 	srand(time(NULL));
@@ -43,11 +43,26 @@ int main() {
 	world MyWorld;
 	MyWorld.start();
 
-	int tempX = 0; int tempY = 0;
+	int tempX = 0; int tempY = 0; int tempZ = 0;
 
 	while (true) { //not good practice
 		GDsetTitle(std::to_string((double)1/ ((double)(end-start)/ CLOCKS_PER_SEC)).c_str());
 		start = (int)clock();
+
+
+		//MyWorld.drawTile(tempX, tempY, tempZ);
+		//tempX++;
+		//if (tempX > 9) {
+		//	tempX = 0;
+		//	tempZ++;
+		//}
+		//if (tempZ > 9) {
+		//	tempZ = 0;
+		//	tempY++;
+		//}
+		//if (tempY > 9) {
+		//	tempY=0;
+		//}
 
 
 		MyWorld.update();
@@ -56,6 +71,7 @@ int main() {
 
 
 		end = (int)clock();
+		//std::cin.ignore();
 	}
 
 	MyWorld.destory();

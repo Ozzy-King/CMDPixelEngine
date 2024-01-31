@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allImportHeader.h" />
+    <ClInclude Include="chunk.h" />
     <ClInclude Include="GDIEngine.h" />
     <ClInclude Include="GDISprite.h" />
     <ClInclude Include="world.h" />
