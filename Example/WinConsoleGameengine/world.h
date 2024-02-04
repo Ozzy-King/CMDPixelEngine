@@ -3,16 +3,22 @@
 
 extern int __memused__;
 
+//make first bit of tile codes as transparnecy, (to check tranparency & the tile with 1 and check its more than 0)
+
 struct vec2d {
 	int x=0, y=0;
 };
 
 class world {
 	enum tileType {
-		blank = 0,
 		wire = 1,
+		blank = 0,
 		grass = 2,
-		gravel = 3
+		gravel = 3,
+		convUpLeft = 26,
+		convDownRight = 27,
+		convUpRight = 28,
+		convDownLeft = 29
 	};
 	enum tileSection {
 		top = 0,
@@ -26,7 +32,7 @@ class world {
 	};
 
 	int worldOffsetX = -122, worldOffsetY = 100;
-	int worldWidth = 10, worldHeight = 10, worldDepth=10;
+	int worldWidth = 10, worldHeight = 2, worldDepth=10;
 
 	int worldLittleTileWidth = 10, worldLittleTileHeight = 10;
 	int worldTileWidth = 20, worldTileHeight = 10;
@@ -57,7 +63,7 @@ public:
 		else { tileMapSelect = 1; }
 
 		tileMapSelect += tiletype * 2; //goes to the correct tile type
-		tileMapSelect += tilesect * 20; //goes to the correct tile section
+		tileMapSelect += tilesect * 102; //goes to the correct tile section
 		return tileMapSelect;
 	}
 	//TODO correc tthe check for if the side should draw
@@ -86,38 +92,55 @@ public:
 			GDSPdrawSprite(worldCoord.x + worldLittleTileWidth, worldCoord.y, worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::right, (tileType)MAP[yTilePos][zTilePos][xTilePos], tileSection::top));
 		}
 		if (!blockleft) {
+			//bottom left
+			GDSPdrawSprite(worldCoord.x, worldCoord.y + ((worldLittleTileHeight / 2) * 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::left, (tileType)MAP[yTilePos][zTilePos][xTilePos], tileSection::bottom));
 			//middle left
 			GDSPdrawSprite(worldCoord.x, worldCoord.y + (worldLittleTileHeight / 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::left, (tileType)MAP[yTilePos][zTilePos][xTilePos], tileSection::middle));
-			//bottom left
-			GDSPdrawSprite(worldCoord.x, worldCoord.y + ((worldLittleTileHeight/2)*2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::left, (tileType)MAP[yTilePos][zTilePos][xTilePos], tileSection::bottom));
 		}
 			
 		if (!blockright) {
+			//bottom right
+			GDSPdrawSprite(worldCoord.x + worldLittleTileWidth, worldCoord.y + ((worldLittleTileHeight / 2) * 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::right, (tileType)MAP[yTilePos][zTilePos][xTilePos], tileSection::bottom));
 			//middle right
 			GDSPdrawSprite(worldCoord.x+ worldLittleTileWidth, worldCoord.y + (worldLittleTileHeight / 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::right, (tileType)MAP[yTilePos][zTilePos][xTilePos], tileSection::middle));
-			//bottom right
-			GDSPdrawSprite(worldCoord.x+ worldLittleTileWidth, worldCoord.y + ((worldLittleTileHeight / 2) * 2), worldLittleTileWidth, worldLittleTileHeight, &worldTileMap, getTileFromTileMap(Sides::right, (tileType)MAP[yTilePos][zTilePos][xTilePos], tileSection::bottom));
 		}
 		return 0;
 	}
 
 	int setupMap(int mapWidth, int mapHeight, int mapDepth) {
 		//setup map
+		srand(time(NULL));
 		MAP = (int***)malloc(sizeof(int**) * mapHeight);
 		for (int y = 0; y < mapHeight; y++) {
 			MAP[y] = (int**)malloc(sizeof(int*) * mapDepth);
 			for (int z = 0; z < mapDepth; z++) {
-				MAP[y][z] = (int*)malloc(sizeof(int) * mapDepth);
+				MAP[y][z] = (int*)malloc(sizeof(int) * mapWidth);
 				for (int x = 0; x < mapWidth; x++) {
 					int randy = rand() % 10;
-					if (randy < 2) {
-						MAP[y][z][x] = 0;
+					if (!y) {
+						if (randy < 5) {
+							MAP[y][z][x] = 2;
+						}
+						else if (randy < 10) {
+							MAP[y][z][x] = 3;
+						}
 					}
-					else if (randy < 6) {
-						MAP[y][z][x] = 2;
-					}
-					else if (randy < 10) {
-						MAP[y][z][x] = 3;
+					else{
+						if (randy < 2) {
+							MAP[y][z][x] = 0;
+						}
+						else if (randy < 4) {
+							MAP[y][z][x] = 26;
+						}
+						else if (randy < 6) {
+							MAP[y][z][x] = 27;
+						}
+						else if (randy < 8) {
+							MAP[y][z][x] = 28;
+						}
+						else if (randy < 10) {
+							MAP[y][z][x] = 29;
+						}
 					}
 				}
 			}
@@ -133,10 +156,10 @@ public:
 	int start() {
 		//gets the tile map
 		char WorldTileMap[] = "./isometricWorldTileMap.bmp";
-		this->worldTileMap = GDSPcreateSprite(WorldTileMap, 200, 100, 10, 10, 1, RGB(255, 255, 255));
+		this->worldTileMap = GDSPcreateSprite(WorldTileMap, 1020, 30, 10, 10, 1, RGB(255, 255, 255));
 
 		//setup map
-		setupMap(10,10, 10);
+		setupMap(10,2, 10);
 
 		return 0;
 	}
@@ -145,11 +168,9 @@ public:
 		
 		for (int y = 0; y < worldHeight; y++) {
 			for (int z = 0; z < worldDepth; z++) {
-				std::thread xthread = std::thread([&]() {
-					for (int x = 0; x < worldWidth; x++) {
-						drawTile(x, y, z);
-					}
-				});
+				for (int x = 0; x < worldWidth; x++) {
+					drawTile(x, y, z);
+				}
 			}
 		}
 		

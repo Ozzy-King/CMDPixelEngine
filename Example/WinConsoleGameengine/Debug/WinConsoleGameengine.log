@@ -1,10 +1,4 @@
-﻿  GDIEngineSource.c
-C:\Users\oclark1\Desktop\CMDPixelEngine\Example\WinConsoleGameengine\GDIEngineSource.c(135,28): warning C4090: 'function': different 'const' qualifiers
-C:\Users\oclark1\Desktop\CMDPixelEngine\Example\WinConsoleGameengine\GDIEngineSource.c(139,29): warning C4090: 'function': different 'const' qualifiers
-C:\Users\oclark1\Desktop\CMDPixelEngine\Example\WinConsoleGameengine\GDIEngineSource.c(127,1): warning C4090: 'initializing': different 'const' qualifiers
-  GDISpriteSource.c
-  Generating Code...
-C:\Users\oclark1\Desktop\CMDPixelEngine\Example\WinConsoleGameengine\GDISpriteSource.c(42): warning C4716: 'GDSPfreeSprite': must return a value
-  main.cpp
-C:\Users\oclark1\Desktop\CMDPixelEngine\Example\WinConsoleGameengine\main.cpp(31,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  WinConsoleGameengine.vcxproj -> C:\Users\oclark1\Desktop\CMDPixelEngine\Example\Debug\WinConsoleGameengine.exe
+﻿  main.cpp
+C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\WinConsoleGameengine\world.h(113,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\WinConsoleGameengine\main.cpp(33,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  WinConsoleGameengine.vcxproj -> C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\Debug\WinConsoleGameengine.exe
