@@ -1,3 +1,0 @@
-﻿  main.cpp
-C:\Users\GRUB\source\repos\WinConsoleGameengine\WinConsoleGameengine\main.cpp(9,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  WinConsoleGameengine.vcxproj -> C:\Users\GRUB\source\repos\WinConsoleGameengine\x64\Debug\WinConsoleGameengine.exe

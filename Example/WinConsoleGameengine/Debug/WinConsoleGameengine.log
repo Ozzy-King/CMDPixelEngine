@@ -1,4 +1,0 @@
-﻿  main.cpp
-C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\WinConsoleGameengine\world.h(113,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\WinConsoleGameengine\main.cpp(33,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  WinConsoleGameengine.vcxproj -> C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\Debug\WinConsoleGameengine.exe

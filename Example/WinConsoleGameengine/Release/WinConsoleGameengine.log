@@ -1,7 +1,10 @@
-﻿  main.cpp
-C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\WinConsoleGameengine\main.cpp(33,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  GDIEngineSource.c
+C:\Users\GRUB\source\repos\CMDPixelEngine\Example\WinConsoleGameengine\GDIEngineSource.c(128,1): warning C4090: 'initializing': different 'const' qualifiers
+  GDISpriteSource.c
+  main.cpp
+C:\Users\GRUB\source\repos\CMDPixelEngine\Example\WinConsoleGameengine\main.cpp(29,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 113 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Previous IPDB not found, fall back to full compilation.
+  All 258 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-  WinConsoleGameengine.vcxproj -> C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\Release\WinConsoleGameengine.exe
+  WinConsoleGameengine.vcxproj -> C:\Users\GRUB\source\repos\CMDPixelEngine\Example\Release\WinConsoleGameengine.exe

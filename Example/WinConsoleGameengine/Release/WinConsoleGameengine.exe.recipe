@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\GRUB\Documents\REPOS\CMDPixelEngine\Example\Release\WinConsoleGameengine.exe</FullPath>
+      <FullPath>C:\Users\GRUB\source\repos\CMDPixelEngine\Example\Release\WinConsoleGameengine.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

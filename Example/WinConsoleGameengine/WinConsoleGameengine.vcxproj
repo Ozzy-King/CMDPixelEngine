@@ -134,10 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="allImportHeader.h" />
-    <ClInclude Include="chunk.h" />
     <ClInclude Include="GDIEngine.h" />
     <ClInclude Include="GDISprite.h" />
-    <ClInclude Include="world.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
