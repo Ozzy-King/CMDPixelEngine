@@ -1,4 +1,43 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "GDISprite.h"
+
+HBITMAP GDSPloadImage(char* fileName, int imgWidth, int imgHeight) {
+	int width, height, channels;
+	unsigned char* data = stbi_load(fileName, &width, &height, &channels, STBI_rgb);
+
+	if (data == NULL) {
+		printf("Failed to load image.\n");
+		return NULL;
+	}
+	int rowSize = width * 3;
+	for (int i = 0; i < width * height; ++i) {
+		unsigned char tmp = data[i * 3];
+		data[i * 3] = data[i * 3 + 2];       // Swap Red and Blue
+		data[i * 3 + 2] = tmp;
+	}
+
+	// Create an HBITMAP from the data
+	HBITMAP hBitmap = NULL;
+	HDC hdc = GetDC(NULL);
+	if (hdc) {
+		BITMAPINFO bmi = { 0 };
+		bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+		bmi.bmiHeader.biWidth = MIN(width, imgWidth);
+		bmi.bmiHeader.biHeight = -(MIN(height, imgHeight)); // Negative height for top-down bitmap
+		bmi.bmiHeader.biPlanes = 1;
+		bmi.bmiHeader.biBitCount = 24;  // 24-bit color
+		bmi.bmiHeader.biCompression = BI_RGB;
+
+		// Create the HBITMAP
+		hBitmap = CreateDIBitmap(hdc, &bmi.bmiHeader, CBM_INIT, data, &bmi, DIB_RGB_COLORS);
+		ReleaseDC(NULL, hdc);
+	}
+
+	// Free the image data loaded by stb_image
+	stbi_image_free(data);
+
+	return hBitmap;
+}
 
 struct GDSPsprite GDSPcreateSprite(char* fileName, int imgWidth, int imgHeight, int tileWidth, int tileHeight, int transparent , COLORREF transparentColour) {
 	struct GDSPsprite newSprite;
@@ -8,15 +47,7 @@ struct GDSPsprite GDSPcreateSprite(char* fileName, int imgWidth, int imgHeight, 
 	newSprite._transparentColour = transparentColour;
 
 	//gets sprite into the GDSPsprite
-	//gets the lenght of the filename string and converts to wide char array
-	int filenameLen = 0;
-	while (fileName[filenameLen] != '\0') { filenameLen++; }
-	
-	WCHAR* ConvertedFilename = (WCHAR*)malloc(sizeof(WCHAR) * (filenameLen+1));
-	for (int i = 0; i < filenameLen; i++) { ConvertedFilename[i] = fileName[i]; } 
-	ConvertedFilename[filenameLen] = '\0';
-
-	newSprite._spriteMap = (HBITMAP)LoadImage(NULL, ConvertedFilename, IMAGE_BITMAP, imgWidth, imgHeight, LR_LOADFROMFILE);
+	newSprite._spriteMap = GDSPloadImage(fileName, imgWidth, imgHeight);// (HBITMAP)LoadImage(NULL, ConvertedFilename, IMAGE_BITMAP, imgWidth, imgHeight, LR_LOADFROMFILE);
 
 	//get all the tiles
 	int numberOfTiles = (imgWidth / tileWidth) * (imgHeight / tileHeight);//gets number of tiles (will be used later to index arrays)
@@ -31,7 +62,6 @@ struct GDSPsprite GDSPcreateSprite(char* fileName, int imgWidth, int imgHeight, 
 		}
 	}
 
-	free(ConvertedFilename);
 	return newSprite;
 }
 
@@ -39,18 +69,20 @@ int GDSPfreeSprite(struct GDSPsprite* sprite) {
 	free(sprite->_topLeftX);
 	free(sprite->_topLeftY);
 	DeleteObject(sprite->_spriteMap);
+	return 0;
 }
 
 int GDSPdrawSprite(int x, int y, int width, int height, struct GDSPsprite* sprite, int tilePos) {
-	HDC tempDeviceContext = CreateCompatibleDC(_GDconsoleDeviceContext);
+	HDC tempDeviceContext = CreateCompatibleDC(_GDconsoleDeviceContext); //make this a single created varaible that is reused
 	HBITMAP temp = SelectObject(tempDeviceContext, sprite->_spriteMap); //links the bitmap to the dc to draw on it
-
-	//BitBlt(_GDbackBufferDeviceContext, min(x, _GDrawWidth), min(y, _GDrawHeight), min(sprite->_tileWidth, _GDrawWidth), min(sprite->_tileHeight, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], SRCCOPY);
-	
+	int newx = x * _GDpixelWidth;
+	int newy = y * _GDpixelHeight;
+	int newWidth = width * _GDpixelWidth;
+	int newHeight = height * _GDpixelHeight;
 	if (sprite->_transparent) {
-		TransParentBlt(_GDbackBufferDeviceContext, min(x, _GDrawWidth), min(y, _GDrawHeight), min(width, _GDrawWidth), min(height, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], sprite->_tileWidth, sprite->_tileHeight, sprite->_transparentColour);
+		TransParentBlt(_GDbackBufferDeviceContext, min(newx, _GDrawWidth), min(newy, _GDrawHeight), min(newWidth, _GDrawWidth), min(newHeight, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], sprite->_tileWidth, sprite->_tileHeight, sprite->_transparentColour);
 	} else {
-		StretchBlt(_GDbackBufferDeviceContext, min(x, _GDrawWidth), min(y, _GDrawHeight), min(width, _GDrawWidth), min(height, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], sprite->_tileWidth, sprite->_tileHeight, SRCCOPY);
+		StretchBlt(_GDbackBufferDeviceContext, min(newx, _GDrawWidth), min(newy, _GDrawHeight), min(newWidth, _GDrawWidth), min(newHeight, _GDrawHeight), tempDeviceContext, sprite->_topLeftX[tilePos], sprite->_topLeftY[tilePos], sprite->_tileWidth, sprite->_tileHeight, SRCCOPY);
 	}
 	SelectObject(tempDeviceContext, temp);
 	DeleteDC(tempDeviceContext);

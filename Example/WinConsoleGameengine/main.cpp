@@ -6,18 +6,18 @@
 
 COLORREF regColour = RGB(255,0,0);
 
-void scrolltext(std::string& str) {
-	std::string newStr = str;
-	for (int i = str.length()-1; i >= 0; i--) {
-		if (i == 0) {
-			newStr[i] = str[str.length() - 1];
-		}
-		else {
-			newStr[i] = str[i - 1];
-		}
-	}
-	str = newStr;
-}
+//void scrolltext(std::string& str) {
+//	std::string newStr = str;
+//	for (int i = str.length()-1; i >= 0; i--) {
+//		if (i == 0) {
+//			newStr[i] = str[str.length() - 1];
+//		}
+//		else {
+//			newStr[i] = str[i - 1];
+//		}
+//	}
+//	str = newStr;
+//}
 
 
 int main() {
@@ -35,7 +35,7 @@ int main() {
 	int start = 1;
 	int end = 2;
 
-	while (true) { //not good practice
+	while (1) { //not good practice
 		GDsetTitle(std::to_string((double)1/ ((double)(end-start)/ CLOCKS_PER_SEC)).c_str());
 		start = (int)clock();
 
@@ -50,7 +50,7 @@ int main() {
 
 	GDdeInit();
 
-	std::cin.ignore(); //testing get rid of
+	//std::cin.ignore(); //testing get rid of
 	
 	std::cout << "hello World!\n";
 	return 0;
